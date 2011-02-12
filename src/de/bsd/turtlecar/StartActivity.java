@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +41,10 @@ public class StartActivity extends Activity {
         moveList.add(new Move(Moves.LEFT,1));
         moveList.add(new Move(Moves.STRAIT,2));
         moveList.add(new Move(Moves.RIGHT,1));
+        moveList.add(new Move(Moves.STRAIT,1));
+        moveList.add(new Move(Moves.RIGHT,1));
+        moveList.add(new Move(Moves.STRAIT,1));
+        moveList.add(new Move(Moves.LEFT,1));
         moveList.add(new Move(Moves.STRAIT,3));
 
         SampleView sampleView = (SampleView) findViewById(R.id.graph_view);
@@ -47,12 +52,14 @@ public class StartActivity extends Activity {
         sampleView.invalidate(); // force drawing
 
         carView = new ImageView(this);
-        carView.setImageDrawable(getResources().getDrawable(R.drawable.turtle_car));
+        Drawable drawable = getResources().getDrawable(R.drawable.turtle_car);
+
+        carView.setImageDrawable(drawable);
         ViewParent vp = sampleView.getParent();
         if (vp instanceof FrameLayout) {
             FrameLayout fl = (FrameLayout) vp;
             fl.addView(carView);
-            Animation anim = new TranslateAnimation(0,0,0,320); // put car on start
+            Animation anim = new TranslateAnimation(0,0,0,320+32+64); // put car on start
             anim.setFillAfter(true);
             carView.startAnimation(anim);
 
@@ -68,11 +75,12 @@ public class StartActivity extends Activity {
         animationSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animationSet.setFillBefore(true);
         animationSet.setFillAfter(true);
+        Animation.AnimationListener listener = new RunListener(this);
 
-        Animation anim = new TranslateAnimation(0,0,0,320); // put car on start
+        Animation anim = new TranslateAnimation(0,0,0,320+32+64); // put car on start
         animationSet.addAnimation(anim);
         int x=240; // TODO get from Screen
-        int y=320;
+        int y=320+32+64;
         int time =0;
         int cx = carView.getDrawable().getIntrinsicWidth() ;
         int cy = carView.getDrawable().getIntrinsicHeight() ;
@@ -82,13 +90,17 @@ public class StartActivity extends Activity {
             Log.i("StartActivity/Run" ,move + ", start x=" +x + ", start y=" + y);
             switch (move.getMove()) {
             case STRAIT:
+                // TODO decompose into individual moves, so that we can
+                //      pick up items or test for crashes
                 compute(heading, move.getUnits());
                 TranslateAnimation ta = new TranslateAnimation(0, dx, 0, dy);
                 int deltaTime = move.getUnits() * 1000;
                 ta.setDuration(deltaTime);
                 ta.setStartOffset(time);
                 ta.setInterpolator(new AccelerateDecelerateInterpolator());
+                ta.setAnimationListener(listener);
                 animationSet.addAnimation(ta);
+
                 time += deltaTime;
                 x += dx;
                 y += dy;
@@ -96,16 +108,18 @@ public class StartActivity extends Activity {
 
             case LEFT:
                 RotateAnimation rotateLeft = new RotateAnimation(0,-90,
-                        x-cx,y+cy/2);
+                        x-cx-cx/4,y+cy/2);
                 rotateLeft.setDuration(2000);
                 rotateLeft.setStartOffset(time);
                 time+=2000;
+                rotateLeft.setAnimationListener(listener);
                 animationSet.addAnimation(rotateLeft);
                 heading = Heading.toLeft(heading);
                 break;
             case RIGHT:
                 RotateAnimation rotateRight = new RotateAnimation(0,90,
-                        x-cx,y+cy/2);
+                        x-cx-cx/4,y+cy/2);
+                rotateRight.setAnimationListener(listener);
                 rotateRight.setDuration(2000);
                 rotateRight.setStartOffset(time);
                 time+=2000;
@@ -119,64 +133,18 @@ public class StartActivity extends Activity {
                 break;
             }
         }
+        Log.i("StartActivity/Run" ,"After moves end x=" +x + ", end y=" + y);
 
-/*
-
-        TranslateAnimation a = new TranslateAnimation(
-                Animation.ABSOLUTE,100-cx, Animation.ABSOLUTE,100-cx,
-                Animation.ABSOLUTE,200-cy, Animation.ABSOLUTE,200-cy);
-        a.setDuration(1000);
-        animationSet.addAnimation(a);
-
-        x= 200;
-        y= 200;
-
-
-        a = new TranslateAnimation(0, 0, 0, -50);
-        a.setStartOffset(1000);
-        a.setDuration(1000);
-        animationSet.addAnimation(a);
-
-        y=y-50;
-
-        RotateAnimation r;
-        r = new RotateAnimation(0, 90,// x+cx,y+cy); // rechts ; Achtung, andere Ecke
-                Animation.RELATIVE_TO_PARENT,0.5f,
-                Animation.RELATIVE_TO_PARENT,0.5f);
-
-//        RotateAnimation r = new RotateAnimation(0f, -90f,x+cx,y+cy); // links
-
-
-        r.setStartOffset(2000);
-        r.setDuration(1000);
-        animationSet.addAnimation(r);
-
-        a = new TranslateAnimation(0, -50, 0, 0);
-        x+=-50;
-        a.setDuration(1000);
-        a.setStartOffset(3000);
-        animationSet.addAnimation(a);
-
-        r = new RotateAnimation(0, 90,x+cx,y+cy); // rechts ; Achtung, andere Ecke
-//                Animation.RELATIVE_TO_SELF,0.1f,
-//                Animation.RELATIVE_TO_SELF,0.1f);
-        r.setStartOffset(4000);
-        r.setDuration(1000);
-        animationSet.addAnimation(r);
-
-        a = new TranslateAnimation(0, 0, 0, -150);
-        y+=-150;
-        a.setDuration(1000);
-        a.setStartOffset(5000);
-        a.setInterpolator(new AccelerateDecelerateInterpolator());
-        animationSet.addAnimation(a);
-
-*/
         carView.startAnimation(animationSet);
-        print(carView);
 
     }
 
+    /**
+     * Compute the next delta values for the car
+     * @param heading In which direction does it drive?
+     * @param units how many units does it drive
+     * @todo make this return/modify grid coordinates and later translate to screen coordinates
+     */
     private void compute(Heading heading, int units) {
         switch (heading) {
 
@@ -197,9 +165,5 @@ public class StartActivity extends Activity {
             dy = 0;
             break;
         }
-    }
-
-    private void print(View v) {
-        Log.i("CarView","left="+ v.getLeft() +", top=" + v.getTop() + ", right=" + v.getRight() + ", bottom=" + v.getBottom());
     }
 }

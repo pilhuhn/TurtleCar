@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+>
+    <TextView android:layout_height="wrap_content"
+              android:layout_width="fill_parent"
+              android:text="Hello World"
+              />
+
+    <FrameLayout
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent">
+
+        <de.bsd.turtlecar.SampleView android:id="@+id/graph_view"
+              android:layout_height="450px"
+              android:layout_width="fill_parent"
+              android:visibility="invisible"
+              />
+
+<!--
+        <ImageView android:id="@+id/car_view"
+                   android:src="@drawable/turtle_car"
+                   android:layout_height="wrap_content"
+                   android:layout_width="wrap_content"
+                   android:visibility="invisible"/>
+-->
+
+
+    </FrameLayout>
+
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent"
+                  android:gravity="bottom"
+              >
+        <Button android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/run"
+                android:onClick="run"
+                />
+
+   </LinearLayout>
+
+
+
+</LinearLayout>

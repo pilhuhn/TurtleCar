@@ -1,0 +1,7 @@
+
+<!ELEMENT level (item*)>
+<!ELEMENT item EMPTY>
+
+<!ATTLIST item type (wall|gold|fuel)>
+<!ATTLIST item x >
+<!ATTLIST item y >

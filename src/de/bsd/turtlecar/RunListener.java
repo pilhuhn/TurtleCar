@@ -3,6 +3,7 @@ package de.bsd.turtlecar;
 import android.content.Context;
 import android.util.Log;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 
 /**
  * Get notified on Animations - not sure yet how this is useful
@@ -24,6 +25,11 @@ public class RunListener implements Animation.AnimationListener {
     @Override
     public void onAnimationEnd(Animation animation) {
         Log.i("RunListener","Ended animation: " + animation);
+        if (animation instanceof AnimationSet) {
+            AnimationSet animationSet = (AnimationSet) animation;
+            // TODO check x,y of car
+            // y < 32 -> crossed finish
+        }
     }
 
     @Override

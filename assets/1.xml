@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<!DOCTYPE level SYSTEM "level.dtd">
+
+<level>
+    <item type="wall" x="0" y="0"/>
+    <item type="wall" x="4" y="0"/>
+    <item type="wall" x="2" y="3"/>
+    <item type="gold" x="1" y="3"/>
+    <item type="fuel" x="3" y="4"/>
+</level>

@@ -76,6 +76,7 @@ public class StartActivity extends Activity {
         animationSet.setFillBefore(true);
         animationSet.setFillAfter(true);
         Animation.AnimationListener listener = new RunListener(this);
+        animationSet.setAnimationListener(listener);
 
         Animation anim = new TranslateAnimation(0,0,0,320+32+64); // put car on start
         animationSet.addAnimation(anim);
@@ -109,9 +110,9 @@ public class StartActivity extends Activity {
             case LEFT:
                 RotateAnimation rotateLeft = new RotateAnimation(0,-90,
                         x-cx-cx/4,y+cy/2);
-                rotateLeft.setDuration(2000);
+                rotateLeft.setDuration(500);
                 rotateLeft.setStartOffset(time);
-                time+=2000;
+                time+=500;
                 rotateLeft.setAnimationListener(listener);
                 animationSet.addAnimation(rotateLeft);
                 heading = Heading.toLeft(heading);
@@ -120,9 +121,9 @@ public class StartActivity extends Activity {
                 RotateAnimation rotateRight = new RotateAnimation(0,90,
                         x-cx-cx/4,y+cy/2);
                 rotateRight.setAnimationListener(listener);
-                rotateRight.setDuration(2000);
+                rotateRight.setDuration(500);
                 rotateRight.setStartOffset(time);
-                time+=2000;
+                time+=500;
                 animationSet.addAnimation(rotateRight);
                 heading = Heading.toRight(heading);
                 break;

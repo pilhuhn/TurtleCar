@@ -4,13 +4,16 @@
     <application android:icon="@drawable/turtle_car"
                  android:label="TurtleCar"
                  android:debuggable="true"
+                 android:name=".TCApplication"
             >
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".StartActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".EditRunActivity" android:screenOrientation="portrait"/>
     </application>
 </manifest>

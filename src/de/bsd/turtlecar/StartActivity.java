@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 /**
  *  Draw the track and let the user run the race
@@ -24,6 +26,7 @@ import android.widget.ImageView;
  */
 public class StartActivity extends Activity {
 
+    static final int MOVE_MS = 1000;
     List<Move> moveList = new ArrayList<Move>();
     ImageView carView;
     Integer dx = 0;
@@ -37,15 +40,15 @@ public class StartActivity extends Activity {
 
         setContentView(R.layout.start);
 
-        moveList.add(new Move(Moves.STRAIT,3));
+        moveList.add(new Move(Moves.STRAIGHT,3));
         moveList.add(new Move(Moves.LEFT,1));
-        moveList.add(new Move(Moves.STRAIT,2));
+        moveList.add(new Move(Moves.STRAIGHT,2));
         moveList.add(new Move(Moves.RIGHT,1));
-        moveList.add(new Move(Moves.STRAIT,1));
+        moveList.add(new Move(Moves.STRAIGHT,1));
         moveList.add(new Move(Moves.RIGHT,1));
-        moveList.add(new Move(Moves.STRAIT,1));
+        moveList.add(new Move(Moves.STRAIGHT,1));
         moveList.add(new Move(Moves.LEFT,1));
-        moveList.add(new Move(Moves.STRAIT,3));
+        moveList.add(new Move(Moves.STRAIGHT,3));
 
         SampleView sampleView = (SampleView) findViewById(R.id.graph_view);
         sampleView.setVisibility(View.VISIBLE);
@@ -90,12 +93,12 @@ public class StartActivity extends Activity {
         for (Move move : moveList) {
             Log.i("StartActivity/Run" ,move + ", start x=" +x + ", start y=" + y);
             switch (move.getMove()) {
-            case STRAIT:
+            case STRAIGHT:
                 // TODO decompose into individual moves, so that we can
                 //      pick up items or test for crashes
                 compute(heading, move.getUnits());
                 TranslateAnimation ta = new TranslateAnimation(0, dx, 0, dy);
-                int deltaTime = move.getUnits() * 1000;
+                int deltaTime = move.getUnits() * MOVE_MS;
                 ta.setDuration(deltaTime);
                 ta.setStartOffset(time);
                 ta.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -130,7 +133,7 @@ public class StartActivity extends Activity {
             case BACKUP:
                 break;
             case WAIT:
-                time+=1000;
+                time+= MOVE_MS;
                 break;
             }
         }
@@ -139,6 +142,27 @@ public class StartActivity extends Activity {
         carView.startAnimation(animationSet);
 
     }
+
+
+    @SuppressWarnings("unused")
+    public void edit(View v) {
+        Intent i = new Intent(this,EditRunActivity.class);
+        startActivityForResult(i,1);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+             Intent data) {
+        // TODO ...
+
+        List<String> moves = data.getStringArrayListExtra("data");
+        moveList = new ArrayList<Move>(moves.size());
+        for (String move: moves ) {
+            Moves m = Moves.valueOf(move.toUpperCase()); // TODO i18n of strings
+            moveList.add(new Move(m,1));
+        }
+        Toast.makeText(this,"Moves loaded",Toast.LENGTH_LONG).show();
+    }
+
 
     /**
      * Compute the next delta values for the car

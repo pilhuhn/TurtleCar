@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="8dip"
+    android:paddingRight="8dip">
+
+    <ListView android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:stackFromBottom="true"
+        android:transcriptMode="normal"/>
+
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent">
+
+        <Button style="@style/button_style"
+                android:text="@string/left"
+                android:onClick="button_left"
+                />
+        <Button style="@style/button_style"
+                android:text="@string/straight"
+                android:onClick="button_straight"
+                />
+        <Button style="@style/button_style"
+                android:text="@string/right"
+                android:onClick="button_right"
+                />
+        <Button style="@style/button_style"
+                android:text="@string/delete"
+                android:onClick="button_delete"
+                />
+        <Button style="@style/button_style"
+                android:text="@string/clear"
+                android:onClick="button_clear"
+                />
+    </LinearLayout>
+    <Button android:onClick="done"
+            style="@style/button_style"
+            android:text="@string/done"
+            />
+
+
+</LinearLayout>

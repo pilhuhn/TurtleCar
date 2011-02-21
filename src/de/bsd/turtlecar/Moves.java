@@ -5,7 +5,7 @@ package de.bsd.turtlecar;
  * @author Heiko W. Rupp
  */
 public enum Moves {
-    STRAIT,
+    STRAIGHT,
     LEFT,
     RIGHT,
     BACKUP,

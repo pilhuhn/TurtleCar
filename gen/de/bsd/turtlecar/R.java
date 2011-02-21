@@ -19,14 +19,25 @@ public final class R {
         public static final int wall=0x7f020005;
     }
     public static final class id {
-        public static final int graph_view=0x7f050000;
+        public static final int graph_view=0x7f060000;
     }
     public static final class layout {
-        public static final int splash=0x7f030000;
-        public static final int start=0x7f030001;
+        public static final int edit_run=0x7f030000;
+        public static final int splash=0x7f030001;
+        public static final int start=0x7f030002;
     }
     public static final class string {
+        public static final int clear=0x7f040008;
+        public static final int delete=0x7f040007;
+        public static final int done=0x7f040006;
+        public static final int edit=0x7f040002;
+        public static final int left=0x7f040003;
         public static final int loading=0x7f040000;
+        public static final int right=0x7f040005;
         public static final int run=0x7f040001;
+        public static final int straight=0x7f040004;
+    }
+    public static final class style {
+        public static final int button_style=0x7f050000;
     }
 }

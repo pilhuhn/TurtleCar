@@ -41,6 +41,11 @@
                 android:text="@string/run"
                 android:onClick="run"
                 />
+        <Button android:text="@string/edit"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:onClick="edit"
+                />
 
    </LinearLayout>
 

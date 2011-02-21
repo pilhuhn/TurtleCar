@@ -27,7 +27,7 @@ import android.widget.Toast;
 public class StartActivity extends Activity {
 
     static final int MOVE_MS = 1000;
-    List<Move> moveList = new ArrayList<Move>();
+    List<MoveWithUnit> moveList = new ArrayList<MoveWithUnit>();
     ImageView carView;
     Integer dx = 0;
     Integer dy = 0;
@@ -40,15 +40,15 @@ public class StartActivity extends Activity {
 
         setContentView(R.layout.start);
 
-        moveList.add(new Move(Moves.STRAIGHT,3));
-        moveList.add(new Move(Moves.LEFT,1));
-        moveList.add(new Move(Moves.STRAIGHT,2));
-        moveList.add(new Move(Moves.RIGHT,1));
-        moveList.add(new Move(Moves.STRAIGHT,1));
-        moveList.add(new Move(Moves.RIGHT,1));
-        moveList.add(new Move(Moves.STRAIGHT,1));
-        moveList.add(new Move(Moves.LEFT,1));
-        moveList.add(new Move(Moves.STRAIGHT,3));
+        moveList.add(new MoveWithUnit(Move.STRAIGHT,3));
+        moveList.add(new MoveWithUnit(Move.LEFT,1));
+        moveList.add(new MoveWithUnit(Move.STRAIGHT,2));
+        moveList.add(new MoveWithUnit(Move.RIGHT,1));
+        moveList.add(new MoveWithUnit(Move.STRAIGHT,1));
+        moveList.add(new MoveWithUnit(Move.RIGHT,1));
+        moveList.add(new MoveWithUnit(Move.STRAIGHT,1));
+        moveList.add(new MoveWithUnit(Move.LEFT,1));
+        moveList.add(new MoveWithUnit(Move.STRAIGHT,3));
 
         SampleView sampleView = (SampleView) findViewById(R.id.graph_view);
         sampleView.setVisibility(View.VISIBLE);
@@ -90,15 +90,15 @@ public class StartActivity extends Activity {
         int cy = carView.getDrawable().getIntrinsicHeight() ;
         Heading heading = Heading.NORTH;
 
-        for (Move move : moveList) {
-            Log.i("StartActivity/Run" ,move + ", start x=" +x + ", start y=" + y);
-            switch (move.getMove()) {
+        for (MoveWithUnit moveWithUnit : moveList) {
+            Log.i("StartActivity/Run" , moveWithUnit + ", start x=" +x + ", start y=" + y);
+            switch (moveWithUnit.getMove()) {
             case STRAIGHT:
                 // TODO decompose into individual moves, so that we can
                 //      pick up items or test for crashes
-                compute(heading, move.getUnits());
+                compute(heading, moveWithUnit.getUnits());
                 TranslateAnimation ta = new TranslateAnimation(0, dx, 0, dy);
-                int deltaTime = move.getUnits() * MOVE_MS;
+                int deltaTime = moveWithUnit.getUnits() * MOVE_MS;
                 ta.setDuration(deltaTime);
                 ta.setStartOffset(time);
                 ta.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -155,10 +155,10 @@ public class StartActivity extends Activity {
         // TODO ...
 
         List<String> moves = data.getStringArrayListExtra("data");
-        moveList = new ArrayList<Move>(moves.size());
+        moveList = new ArrayList<MoveWithUnit>(moves.size());
         for (String move: moves ) {
-            Moves m = Moves.valueOf(move.toUpperCase()); // TODO i18n of strings
-            moveList.add(new Move(m,1));
+            Move m = Move.valueOf(move.toUpperCase()); // TODO i18n of strings
+            moveList.add(new MoveWithUnit(m,1));
         }
         Toast.makeText(this,"Moves loaded",Toast.LENGTH_LONG).show();
     }
